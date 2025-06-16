@@ -10,59 +10,55 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { toast } from "react-toastify"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export interface PriceSettingTableProps {
-  id: number;
-  airline: string;
-  cabinClass: string;
-  priceFrom: number;
-  priceTo: number;
-  commissionAmount: number;
+interface PriceSetting {
+  id: number
+  airline: string
+  cabinClass: string
+  priceFrom: number
+  priceTo: number
+  commissionAmount: number
 }
 
 interface CorporatePriceSettingsTableProps {
-  priceSettings: PriceSettingTableProps[];
+  priceMarkupSettings: PriceSetting[];
 }
 
-export const CorporatePriceSettingsTable = ({ priceSettings }: CorporatePriceSettingsTableProps) => {
-  // Local state initialized from prop
-  const [settings, setSettings] = useState<PriceSettingTableProps[]>(priceSettings)
+export const CorporatePriceSettingsTable = ({ priceMarkupSettings }: CorporatePriceSettingsTableProps) => {
+  const [priceSettings, setPriceSettings] = useState<PriceSetting[]>([])
   const [airlines, setAirlines] = useState<{ label: string; value: string }[]>([])
   const [addingRow, setAddingRow] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [newRow, setNewRow] = useState({ airline: "", cabinClass: "", priceFrom: "", priceTo: "", commissionAmount: "" })
+  const [newRow, setNewRow] = useState({
+    airline: "",
+    cabinClass: "",
+    priceFrom: "",
+    priceTo: "",
+    commissionAmount: "",
+  })
   const [deleteId, setDeleteId] = useState<number | null>(null)
   const [openDialog, setOpenDialog] = useState(false)
 
   const params = useParams()
   const corporateId = params?.id as string
 
-  // Sync incoming prop if it ever changes
-  useEffect(() => {
-    setSettings(priceSettings)
-  }, [priceSettings])
-
-  // Fetch settings from API
   const fetchSettings = async () => {
-    try {
-      const res = await api.get(`/corporate/price-settings/${corporateId}`)
-      const data = res.data?.data?.priceMarkupSettings
-      if (Array.isArray(data)) {
-        setSettings(data)
-      } else {
-        console.error("priceMarkupSettings not found or not an array", res.data)
-        setSettings([])
-      }
-    } catch (error) {
-      console.error("Failed to fetch price settings", error)
-      setSettings([])
+    const res = await api.get(`/corporate/price-settings/${corporateId}`)
+    const settings = res.data?.data?.priceMarkupSettings
+    if (Array.isArray(settings)) {
+      setPriceSettings(settings)
+    } else {
+      console.error("priceMarkupSettings not found or not an array", res.data)
+      setPriceSettings([])
     }
   }
 
-  // Fetch list of airlines for dropdown
   const fetchAirlines = async () => {
     try {
       const res = await api.get("/directory/airlines")
-      const options = res.data?.data?.map((a: any) => ({ label: a.name, value: a.code })) || []
+      const options = res.data?.data?.map((a: any) => ({
+        label: a.name,
+        value: a.code,
+      })) || []
       setAirlines(options)
     } catch (error) {
       console.error("Failed to fetch airlines", error)
@@ -70,7 +66,6 @@ export const CorporatePriceSettingsTable = ({ priceSettings }: CorporatePriceSet
     }
   }
 
-  // Initial load
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true)
@@ -80,12 +75,10 @@ export const CorporatePriceSettingsTable = ({ priceSettings }: CorporatePriceSet
     fetchAll()
   }, [])
 
-  // Handle input changes for new row
   const handleInputChange = (field: string, value: string) => {
-    setNewRow(prev => ({ ...prev, [field]: value }))
+    setNewRow((prev) => ({ ...prev, [field]: value }))
   }
 
-  // Save new price setting
   const handleSave = async () => {
     if (!newRow.priceFrom || !newRow.priceTo || !newRow.commissionAmount) {
       toast.error("Price From, Price To, and Commission Amount are required.")
@@ -116,17 +109,17 @@ export const CorporatePriceSettingsTable = ({ priceSettings }: CorporatePriceSet
     }
   }
 
-  // Confirm deletion
   const confirmDelete = async () => {
-    if (!deleteId) return
-    try {
-      await api.delete(`/corporate/price-settings/delete/${deleteId}`)
-      toast.success("Price setting deleted")
-      setDeleteId(null)
-      setOpenDialog(false)
-      fetchSettings()
-    } catch (error) {
-      toast.error("Failed to delete price setting")
+    if (deleteId) {
+      try {
+        await api.delete(`/corporate/price-settings/delete/${deleteId}`)
+        toast.success("Price setting deleted")
+        fetchSettings()
+        setDeleteId(null)
+        setOpenDialog(false)
+      } catch (error) {
+        toast.error("Failed to delete price setting")
+      }
     }
   }
 

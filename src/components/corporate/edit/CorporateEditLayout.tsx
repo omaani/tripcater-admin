@@ -170,7 +170,7 @@ export const CorporateEditLayout = ({ corporateId }: { corporateId: string }) =>
         )}
 
         {activeTab === "settings" && !loading && (
-          <CorporatePriceSettingsTable priceSettings={settings} />
+          <CorporatePriceSettingsTable priceMarkupSettings={settings} />
         )}
       </div>
     </div>
