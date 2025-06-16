@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 import {
   Home,
   UserCog,
-  Charts,
   UsersRound,
   Briefcase,
   Plane,
