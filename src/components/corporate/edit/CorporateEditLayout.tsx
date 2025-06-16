@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import api from "@/services/api";
 import Link from "next/link";
+import { toast } from "react-toastify"; // make sure this is installed and configured
 import { CorporateInfoForm } from "./tabs/CorporateInfoForm";
 import { CorporateTravelersTable } from "./tabs/CorporateTravelersTable";
-import {CorporateTripsTable} from "./tabs/CorporateTripsList";
-import {CorporateApprovalsTable} from "./tabs/CorporateApprovalProcessList";
-import {CorporateTravelPoliciesTable} from "./tabs/CorporateTravelPoliciesList";
-import {CorporatePriceSettingsTable} from "./tabs/CorporatePriceMarkupSettingsList";
+import { CorporateTripsTable } from "./tabs/CorporateTripsList";
+import { CorporateApprovalsTable } from "./tabs/CorporateApprovalProcessList";
+import { CorporateTravelPoliciesTable } from "./tabs/CorporateTravelPoliciesList";
+import { CorporatePriceSettingsTable } from "./tabs/CorporatePriceMarkupSettingsList";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 import {
   Home,
@@ -36,6 +45,18 @@ export const CorporateEditLayout = ({ corporateId }: { corporateId: string }) =>
   const [settings, setSettings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("info");
+  const [open, setOpen] = useState(false);
+
+  const handleSendActivation = async () => {
+    try {
+      await api.post(`/corporate/send-activation/${corporateId}`);
+      toast.success("Activation email has been sent.");
+    } catch (error) {
+      toast.error("Failed to send activation email.");
+    } finally {
+      setOpen(false);
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -67,12 +88,29 @@ export const CorporateEditLayout = ({ corporateId }: { corporateId: string }) =>
         <h3 className="text-xl font-semibold text-gray-800">
           Edit Company Info – <span className="text-primary font-bold">{basicInfo?.name || "..."}</span>
         </h3>
-        <Link
-          href="/corporates"
-          className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-        >
-          <ArrowLeft size={16} /> Back to List
-        </Link>
+        <div className="flex items-center gap-3">
+          {/* Send Activation Dialog */}
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline">Send Activation</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle>Send Activation Email</DialogTitle>
+              <p>This will send a new activation email to the user. The previous link (if any) will be invalidated.</p>
+              <DialogFooter className="mt-4">
+                <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+                <Button onClick={handleSendActivation}>Send</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Link
+            href="/corporates"
+            className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+          >
+            <ArrowLeft size={16} /> Back to List
+          </Link>
+        </div>
       </div>
 
       <div className="rounded-xl bg-white shadow-sm p-4 border">
@@ -115,30 +153,25 @@ export const CorporateEditLayout = ({ corporateId }: { corporateId: string }) =>
           </div>
         )}
 
-        {/* Travelers Tab */}
         {activeTab === "travelers" && !loading && (
           <CorporateTravelersTable travelers={travelers} />
         )}
 
-         {/* Trips Tab */}
         {activeTab === "trips" && !loading && (
           <CorporateTripsTable trips={trips} />
         )}
 
-         {/* Approvals Tab */}
         {activeTab === "approvals" && !loading && (
           <CorporateApprovalsTable approvalProcesses={approvals} />
         )}
 
-         {/* Policies Tab */}
-          {activeTab === "policies" && !loading && (
-            <CorporateTravelPoliciesTable travelPolicies={policies} />
-          )}
+        {activeTab === "policies" && !loading && (
+          <CorporateTravelPoliciesTable travelPolicies={policies} />
+        )}
 
-          {/* settings Tab */}
-          {activeTab === "settings" && !loading && (
-            <CorporatePriceSettingsTable priceSettings={settings} />
-          )}
+        {activeTab === "settings" && !loading && (
+          <CorporatePriceSettingsTable priceSettings={settings} />
+        )}
       </div>
     </div>
   );

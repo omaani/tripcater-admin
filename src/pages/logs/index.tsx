@@ -1,17 +1,17 @@
+import { MainLayout } from "@/components/layout/MainLayout"
+import withAuth from "@/components/ProtectedPage"
 import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { format } from "date-fns"
 import { Input } from "@/components/ui/input"
 import { ScrollText } from "lucide-react"
-import { MainLayout } from "@/components/layout/MainLayout"
 import api from "@/services/api"
 import { Skeleton } from "@/components/ui/skeleton"
 import Link from "next/link";
 import { Eye } from "lucide-react"
 import { toast } from "react-toastify"
 import { Trash2 } from "lucide-react"
-//import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
   Dialog,
   DialogContent,
@@ -25,7 +25,7 @@ const Popover = dynamic(() => import("@/components/ui/popover").then(mod => mod.
 const PopoverTrigger = dynamic(() => import("@/components/ui/popover").then(mod => mod.PopoverTrigger), { ssr: false })
 const PopoverContent = dynamic(() => import("@/components/ui/popover").then(mod => mod.PopoverContent), { ssr: false })
 
-export default function LogsPage() {
+function LogsPage() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [dateFrom, setDateFrom] = useState<Date | undefined>(undefined)
   const [dateTo, setDateTo] = useState<Date | undefined>(undefined)
@@ -309,3 +309,5 @@ export default function LogsPage() {
     </MainLayout>
   )
 }
+
+export default withAuth(LogsPage)
