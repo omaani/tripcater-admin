@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "http://api-admin.dev.tripcater.com/api", // update per environment
+  baseURL: "https://admin-demo.tripcater.com/api", // update per environment
 })
 
 export const setupInterceptors = (router: any) => {
