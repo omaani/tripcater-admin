@@ -109,7 +109,6 @@ export function Sidebar() {
         <SidebarGroup title="Settings" groupKey="settings" collapsed={collapsed} open={openGroup === "settings"} onHover={handleHover} groupIcon={<SlidersHorizontal size={22} />} items={[
           { label: "Permissions", icon: <ShieldCheck size={18} />, href: "/permissions" },
           { label: "Currency", icon: <CircleDollarSign size={18} />, href: "/currencies" },
-          // { label: "Logs", icon: <ScrollText size={18} />, href: "/logs" },
           { label: "SABRE Tokens", icon: <KeyRound size={18} />, href: "/token-sessions" }
         ]} currentPath={router.pathname} />
 
