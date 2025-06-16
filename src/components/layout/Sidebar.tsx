@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import {
   Home,
   UserCog,
+  Charts,
   UsersRound,
   Briefcase,
   Plane,
@@ -29,6 +30,15 @@ import {
   Wrench,
   Logs,
   CalendarSync,
+  ChartNoAxesColumn,
+  ChartNoAxesCombined,
+  ChartBar,
+  ChartBarBig,
+  ChartPie,
+  Receipt,
+  ReceiptText,
+  Activity,
+  TrendingUp,
 } from "lucide-react"
 import { useEffect, useState } from "react"
 
@@ -72,8 +82,12 @@ export function Sidebar() {
         <SidebarNavItem href="/dashboard" icon={<Home size={22} />} label="Dashboard" collapsed={collapsed} currentPath={router.pathname} />
         <SidebarNavItem href="/users" icon={<UserCog size={22} />} label="Users" collapsed={collapsed} currentPath={router.pathname} />
         <SidebarNavItem href="/corporates" icon={<Briefcase size={22} />} label="Corporates" collapsed={collapsed} currentPath={router.pathname} />
-        <SidebarNavItem href="/demo-requests" icon={<HandHelping size={22} />} label="Demo Requests" collapsed={collapsed} currentPath={router.pathname}
-        />
+
+        <SidebarGroup title="Sales" groupKey="sales" collapsed={collapsed} open={openGroup === "sales"} onHover={handleHover} groupIcon={<ChartNoAxesCombined size={22} />} items={[
+          { label: "Demo Requests", icon: <HandHelping size={18} />, href: "/demo-requests" },
+          { label: "Invoices", icon: <ReceiptText size={18} />, href: "/invoices" }
+        ]} currentPath={router.pathname} />
+
         <SidebarGroup title="Trips" groupKey="trips" collapsed={collapsed} open={openGroup === "trips"} onHover={handleHover} groupIcon={<PlaneLanding size={22} />} items={[
           { label: "Trips", icon: <Plane size={18} />, href: "/trips" },
           { label: "Trip Change Requests", icon: <Repeat size={18} />, href: "/trip-change-requests" },
@@ -102,6 +116,12 @@ export function Sidebar() {
         <SidebarGroup title="Maintenance" groupKey="maintenance" collapsed={collapsed} open={openGroup === "maintenance"} onHover={handleHover} groupIcon={<Wrench size={22} />} items={[
           { label: "Schedule Tasks", icon: <CalendarSync size={18} />, href: "/scheduled-tasks" },
           { label: "Logs", icon: <Logs size={18} />, href: "/logs" }
+        ]} currentPath={router.pathname} />
+
+        <SidebarGroup title="Reports" groupKey="reports" collapsed={collapsed} open={openGroup === "reports"} onHover={handleHover} groupIcon={<ChartPie size={22} />} items={[
+          { label: "Sales summary", icon: <ChartBarBig size={18} />, href: "/sales-summary" },
+          { label: "Traveler activity", icon: <Activity size={18} />, href: "/traveler-activity" },
+          { label: "Service Level Insights", icon: <TrendingUp size={18} />, href: "/insights" },
         ]} currentPath={router.pathname} />
       </nav>
     </aside>
