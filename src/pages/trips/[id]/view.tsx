@@ -21,6 +21,7 @@ import {
   Users,
   RefreshCcw,
 } from "lucide-react";
+import { toast } from "react-toastify";
 
 export default function ViewTripPage() {
   const params = useParams();
@@ -49,9 +50,11 @@ export default function ViewTripPage() {
       const res = await api.post(`/trip/${tripId}/status`, { status: newStatus });
       if (res.data.success) {
         await fetchTripDetails();
+        toast.success("Trip status updated successfully");
       }
     } catch (err) {
       console.error("Failed to update status", err);
+      toast.error("Failed to update trip status");
     } finally {
       setUpdating(false);
     }
