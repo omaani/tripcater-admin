@@ -89,9 +89,8 @@ function TripsPage() {
     };
 
     useEffect(() => {
-        fetchTrips();
-        isInitialLoad.current = false;
-    }, []);
+    fetchTrips();
+}, [pageIndex, pageSize]);
 
     return (
         <MainLayout>
@@ -239,21 +238,48 @@ function TripsPage() {
                     </div>
 
                     {totalPages > 1 && (
-                        <div className="flex gap-2">
-                            {Array.from({ length: totalPages }).map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setPageIndex(i)}
-                                    className={`px-3 py-1 rounded-full border text-sm transition ${pageIndex === i
-                                            ? "bg-[#0E4E96] text-white border-[#0E4E96]"
-                                            : "bg-white text-[#0E4E96] border-gray-300 hover:bg-gray-100"
-                                        }`}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+  <div className="flex items-center gap-2">
+    <button
+      onClick={() => setPageIndex((prev) => Math.max(prev - 1, 0))}
+      disabled={pageIndex === 0}
+      className={`px-3 py-1 rounded-full border text-sm transition ${
+        pageIndex === 0
+          ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+          : "bg-white text-[#0E4E96] border-gray-300 hover:bg-gray-100"
+      }`}
+    >
+      Previous
+    </button>
+
+    {Array.from({ length: totalPages }).map((_, i) => (
+      <button
+        key={i}
+        onClick={() => setPageIndex(i)}
+        disabled={i === pageIndex}
+        className={`px-3 py-1 rounded-full border text-sm transition ${
+          i === pageIndex
+            ? "bg-[#0E4E96] text-white border-[#0E4E96] cursor-default"
+            : "bg-white text-[#0E4E96] border-gray-300 hover:bg-gray-100"
+        }`}
+      >
+        {i + 1}
+      </button>
+    ))}
+
+    <button
+      onClick={() => setPageIndex((prev) => Math.min(prev + 1, totalPages - 1))}
+      disabled={pageIndex === totalPages - 1}
+      className={`px-3 py-1 rounded-full border text-sm transition ${
+        pageIndex === totalPages - 1
+          ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
+          : "bg-white text-[#0E4E96] border-gray-300 hover:bg-gray-100"
+      }`}
+    >
+      Next
+    </button>
+  </div>
+)}
+
                 </div>
             </div>
         </MainLayout>
