@@ -20,8 +20,10 @@ import {
   ListOrdered,
   Users,
   RefreshCcw,
+  FileWarning,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ViewTripPage() {
   const params = useParams();
@@ -64,13 +66,31 @@ export default function ViewTripPage() {
     if (tripId) fetchTripDetails();
   }, [tripId]);
 
-  if (loading) return <MainLayout><div className="p-6">Loading...</div></MainLayout>;
+if (loading) {
+    return (
+      <MainLayout>
+        <div className="p-6 space-y-6">
+          <div className="flex justify-between items-center">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-24" />
+          </div>
+          <div className="bg-white p-4 border rounded-lg space-y-4">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-48 w-full" />
+            <Skeleton className="h-48 w-full" />
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
   if (!trip) return <MainLayout><div className="p-6">Trip not found.</div></MainLayout>;
 
   const booking = trip.bookingItems?.[0];
   const itin = booking?.flightItinGroup?.itinerary?.originDestinationOptions?.originDestinationOption || [];
   const brandedFares = booking?.flightItinGroup?.fareInfo || [];
   const currency = booking?.currency || "JOD";
+  const changeRequest = trip.changeRequestInfo;
 
   return (
     <MainLayout>
@@ -88,6 +108,7 @@ export default function ViewTripPage() {
               <TabsTrigger value="flight"><PlaneTakeoff className="mr-1 w-4 h-4" />Flight Details</TabsTrigger>
               <TabsTrigger value="travelers"><Users className="mr-1 w-4 h-4" />Travelers</TabsTrigger>
               <TabsTrigger value="status"><RefreshCcw className="mr-1 w-4 h-4" />Update Status</TabsTrigger>
+              {changeRequest && <TabsTrigger value="changeRequest"><FileWarning className="mr-1 w-4 h-4" />Change Request</TabsTrigger>}
             </TabsList>
 
             <TabsContent value="overview">
@@ -203,6 +224,21 @@ export default function ViewTripPage() {
                     </Button>
                   ))}
                 </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="changeRequest">
+              <div className="space-y-2">
+                <h2 className="text-lg font-semibold">Change Request Info</h2>
+                {changeRequest.id ? (
+                  <>
+                    <p><strong>Type:</strong> {changeRequest?.type}</p>
+                    <p><strong>Status:</strong> {changeRequest?.status}</p>
+                    <p><strong>Description:</strong> {changeRequest?.description}</p>
+                    <p><strong>Created At:</strong> {new Date(changeRequest?.createDateUTC).toLocaleString()}</p>
+                  </>
+                ) : (
+                  <p className="text-gray-500 italic">No change request found for this trip.</p>
+                )}
               </div>
             </TabsContent>
           </Tabs>
