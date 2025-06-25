@@ -25,7 +25,7 @@ export const CorporateApprovalsTable = ({ approvalProcesses }: CorporateApproval
             {approvalProcesses.length === 0 ? (
               <tr>
                 <td colSpan={7} className="p-4 text-center text-gray-500">
-                  No trips found.
+                  No records found.
                 </td>
               </tr>
             ) : (

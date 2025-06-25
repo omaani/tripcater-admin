@@ -193,9 +193,11 @@ function Dashboard() {
                           <td className="p-2">{b.orderTotal}</td>
                           <td className="p-2">{b.createdDate}</td>
                           <td className="p-2">
+                           <Link href={`/trips/${b.id}/view`}>
                             <button className="text-[#0E4E96] hover:underline text-xs inline-flex items-center gap-1">
                               <Eye className="w-4 h-4" /> View
                             </button>
+                          </Link>
                           </td>
                         </tr>
                       ))}
