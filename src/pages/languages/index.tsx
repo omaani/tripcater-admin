@@ -83,7 +83,7 @@ export default function LanguagesPage() {
                     {lang.rtl ? <Badge variant="outline">Yes</Badge> : "No"}
                   </TableCell>
                   <TableCell>
-                    {lang.published ? <Badge variant="success">Yes</Badge> : "No"}
+                    {lang.published ? <Badge variant="outline">Yes</Badge> : "No"}
                   </TableCell>
                   <TableCell className="text-right">
                     <Button
