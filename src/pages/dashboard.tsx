@@ -86,7 +86,7 @@ function Dashboard() {
             </div>
           )) : (
             [
-              { title: "Total Sales", value: `JOD ${data?.totalSales.toFixed(2)}`, icon: CreditCard },
+              { title: "Total Sales", value: `JOD ${data?.totalSales.toLocaleString()}`, icon: CreditCard },
               { title: "Total Corporates", value: data?.totalCorporates, icon: Users },
               { title: "Total Trips", value: data?.totalTrips, icon: Plane }
             ].map((item, i) => (
@@ -190,7 +190,7 @@ function Dashboard() {
                               {b.status || 'N/A'}
                             </span>
                           </td>
-                          <td className="p-2">{b.orderTotal}</td>
+                          <td className="p-2">{b.orderTotal.toLocaleString()}</td>
                           <td className="p-2">{b.createdDate}</td>
                           <td className="p-2">
                            <Link href={`/trips/${b.id}/view`}>
@@ -229,8 +229,8 @@ function Dashboard() {
                       {data?.recentCustomers.map((c, i) => (
                         <tr key={i} className="border-b hover:bg-gray-50">
                           <td className="p-2">{c.name}</td>
-                          <td className="p-2">JOD {c.creditLimit.toFixed(2)}</td>
-                          <td className="p-2">JOD {c.availableBalance.toFixed(2)}</td>
+                          <td className="p-2">JOD {c.creditLimit.toLocaleString()}</td>
+                          <td className="p-2">JOD {c.availableBalance.toLocaleString()}</td>
                           <td className="p-2">
                             <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${c.status === 'A' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                               {c.status === 'A' ? 'Active' : 'Inactive'}
