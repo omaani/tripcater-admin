@@ -28,6 +28,8 @@ type TravelerInfoProps = {
     firstName?: string;
     lastName?: string;
     email: string;
+    dateOfBirth: string,
+    gender: string,
     phoneNumber: string;
     roleId: number;
     roles: RoleOption[];
@@ -122,6 +124,15 @@ export function TravelerInfoForm({ data }: TravelerInfoProps) {
 
       {/* Account Info */}
       <div className="mt-6 border-t pt-4 text-sm text-muted-foreground space-y-2">
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-gray-700">Gender:</span>
+          <span className="text-gray-800">{data.gender === "M" ? "Male" : "Femail"}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="font-medium text-gray-700">Birth date:</span>
+          <span className="text-gray-800">{data.dateOfBirth}</span>
+        </div>
+
         <div className="flex items-center gap-2">
           <span className="font-medium text-gray-700">Email Verified:</span>
           <span className={data.emailVerified ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>

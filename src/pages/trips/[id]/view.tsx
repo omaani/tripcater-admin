@@ -186,7 +186,8 @@ if (loading) {
                         <th className="px-4 py-2 font-medium">Email</th>
                         <th className="px-4 py-2 font-medium">Passport Number</th>
                         <th className="px-4 py-2 font-medium">Issuing Country</th>
-                        <th className="px-4 py-2 font-medium">Expiry Date</th>
+                        <th className="px-4 py-2 font-medium">Passport Expiry Date</th>
+                        <th className="px-4 py-2 font-medium">Birth Date</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -201,6 +202,7 @@ if (loading) {
                             <td className="px-4 py-2">
                               {traveler.passportExpiryDate} {isExpired && <span className="text-red-500 font-semibold ml-1">(Expired)</span>}
                             </td>
+                            <td className="px-4 py-2">{traveler.dateOfBirth}</td>
                           </tr>
                         );
                       })}
