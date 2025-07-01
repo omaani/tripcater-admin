@@ -126,7 +126,7 @@ export function TravelerInfoForm({ data }: TravelerInfoProps) {
       <div className="mt-6 border-t pt-4 text-sm text-muted-foreground space-y-2">
         <div className="flex items-center gap-2">
           <span className="font-medium text-gray-700">Gender:</span>
-          <span className="text-gray-800">{data.gender === "M" ? "Male" : "Femail"}</span>
+          <span className="text-gray-800">{data.gender === "M" ? "Male" : data.gender === "M"? "Femail" : "N/A"}</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="font-medium text-gray-700">Birth date:</span>
